@@ -87,7 +87,7 @@ if 'setuptools' not in sys.modules:
                 yield line
 
 
-def pretty_exe_doc(program, parser, under='-'):
+def pretty_exe_doc(program, parser, stack=1, under='-'):
     """
     Takes the name of a script and a parser that will give the help message for it.
     The module that called this function will then add a header to the docstring
@@ -97,13 +97,13 @@ def pretty_exe_doc(program, parser, under='-'):
     :param str program: Name of the program that we want to make the header
     :param optparser.Option parser: Either a parser or a callable with no arguments
                                     that will give the desired parser
+    :param int stack: How far up the stack to get the docstring to change
     :param str under: The character you want for the program underline
     """
 
-    print 'pretty', sys.argv[0]
     if os.path.basename(sys.argv[0]) == 'sphinx-build':
         # Get the calling module
-        mod = inspect.getmodule(inspect.stack()[1][0])
+        mod = inspect.getmodule(inspect.stack()[stack][0])
 
         # Get parser
         _parser = parser() if '__call__' in dir(parser) else parser
@@ -118,4 +118,4 @@ def pretty_exe_doc(program, parser, under='-'):
 
 
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
