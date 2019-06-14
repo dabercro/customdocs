@@ -1,6 +1,7 @@
 import os
 import sys
 import inspect
+import re
 
 if 'setuptools' not in sys.modules:
 
@@ -67,7 +68,19 @@ if 'setuptools' not in sys.modules:
 
         headers = ['=', '~', '+', '^', '*', '-', '#']
 
+        # Just the POD markup that I use
+        markup = {
+            'B': '**',
+            'C': '``',
+            'I': '`'
+        }
+
         def process_line(self, line):
+
+            for key in self.markup:
+                line = re.sub(r'' + key + r'\<([^\>]+)\>',
+                              r'' + self.markup[key] + r'\1' + self.markup[key],
+                              line)
 
             if line.startswith('=head'):
                 output = ' '.join(line.split()[1:])
@@ -118,4 +131,4 @@ def pretty_exe_doc(program, parser, stack=1, under='-'):
 
 
 
-__version__ = '0.2.1'
+__version__ = '0.3.0'
